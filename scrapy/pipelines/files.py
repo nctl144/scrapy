@@ -11,6 +11,7 @@ import time
 import logging
 from email.utils import parsedate_tz, mktime_tz
 from six.moves.urllib.parse import urlparse
+from yurl import URL
 from collections import defaultdict
 import six
 
@@ -328,7 +329,7 @@ class FilesPipeline(MediaPipeline):
         if os.path.isabs(uri):  # to support win32 paths like: C:\\some\dir
             scheme = 'file'
         else:
-            scheme = urlparse(uri).scheme
+            scheme = URL(uri).scheme
         store_cls = self.STORE_SCHEMES[scheme]
         return store_cls(uri)
 
