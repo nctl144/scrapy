@@ -8,6 +8,7 @@ to the w3lib.url module. Always import those from there instead.
 import posixpath
 import re
 from six.moves.urllib.parse import (ParseResult, urldefrag, urlparse, urlunparse)
+from yurl import URL
 
 # scrapy.utils.url was moved to w3lib.url and import * ensures this
 # move doesn't break old code
@@ -18,7 +19,7 @@ from scrapy.utils.python import to_unicode
 
 def url_is_from_any_domain(url, domains):
     """Return True if the url belongs to any of the given domains"""
-    host = parse_url(url).netloc.lower()
+    host = parse_url(url).host.lower()
     if not host:
         return False
     domains = [d.lower() for d in domains]
@@ -39,9 +40,9 @@ def parse_url(url, encoding=None):
     """Return urlparsed url from the given argument (which could be an already
     parsed url)
     """
-    if isinstance(url, ParseResult):
+    if isinstance(url, URL):
         return url
-    return urlparse(to_unicode(url, encoding))
+    return URL(to_unicode(url, encoding))
 
 
 def escape_ajax(url):

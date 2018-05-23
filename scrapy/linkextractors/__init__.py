@@ -78,7 +78,7 @@ class FilteringLinkExtractor(object):
             return False
         if self.deny_res and _matches(link.url, self.deny_res):
             return False
-        parsed_url = urlparse(link.url)
+        parsed_url = URL(link.url)
         if self.allow_domains and not url_is_from_any_domain(parsed_url, self.allow_domains):
             return False
         if self.deny_domains and url_is_from_any_domain(parsed_url, self.deny_domains):
