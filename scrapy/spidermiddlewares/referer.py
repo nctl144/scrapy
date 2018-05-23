@@ -6,6 +6,7 @@ from six.moves.urllib.parse import urlparse
 import warnings
 
 from w3lib.url import safe_url_string
+from yurl import URL
 
 from scrapy.http import Request, Response
 from scrapy.exceptions import NotConfigured
@@ -37,11 +38,11 @@ class ReferrerPolicy(object):
         raise NotImplementedError()
 
     def stripped_referrer(self, url):
-        if urlparse(url).scheme not in self.NOREFERRER_SCHEMES:
+        if URL(url).scheme not in self.NOREFERRER_SCHEMES:
             return self.strip_url(url)
 
     def origin_referrer(self, url):
-        if urlparse(url).scheme not in self.NOREFERRER_SCHEMES:
+        if URL(url).scheme not in self.NOREFERRER_SCHEMES:
             return self.origin(url)
 
     def strip_url(self, url, origin_only=False):
@@ -72,13 +73,13 @@ class ReferrerPolicy(object):
 
     def potentially_trustworthy(self, url):
         # Note: this does not follow https://w3c.github.io/webappsec-secure-contexts/#is-url-trustworthy
-        parsed_url = urlparse(url)
+        parsed_url = URL(url)
         if parsed_url.scheme in ('data',):
             return False
         return self.tls_protected(url)
 
     def tls_protected(self, url):
-        return urlparse(url).scheme in ('https', 'ftps')
+        return URL(url).scheme in ('https', 'ftps')
 
 
 class NoReferrerPolicy(ReferrerPolicy):
