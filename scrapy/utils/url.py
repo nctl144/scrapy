@@ -78,8 +78,8 @@ def add_http_if_no_scheme(url):
     """Add http as the default scheme if it is missing from the url."""
     match = re.match(r"^\w+://", url, flags=re.I)
     if not match:
-        parts = urlparse(url)
-        scheme = "http:" if parts.netloc else "http://"
+        parts = URL(url)
+        scheme = "http:" if parts.host else "http://"
         url = scheme + url
 
     return url
@@ -87,7 +87,7 @@ def add_http_if_no_scheme(url):
 
 def guess_scheme(url):
     """Add an URL scheme if missing: file:// for filepath-like input or http:// otherwise."""
-    parts = urlparse(url)
+    parts = URL(url)
     if parts.scheme:
         return url
     # Note: this does not match Windows filepath
