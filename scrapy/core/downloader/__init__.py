@@ -114,7 +114,7 @@ class Downloader(object):
         if 'download_slot' in request.meta:
             return request.meta['download_slot']
 
-        key = urlparse_cached(request).hostname or ''
+        key = urlparse_cached(request).host or ''
         if self.ip_concurrency:
             key = dnscache.get(key, key)
 

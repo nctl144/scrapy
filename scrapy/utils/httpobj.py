@@ -3,6 +3,7 @@
 import weakref
 
 from six.moves.urllib.parse import urlparse
+from yurl import URL
 
 _urlparse_cache = weakref.WeakKeyDictionary()
 def urlparse_cached(request_or_response):
@@ -10,5 +11,5 @@ def urlparse_cached(request_or_response):
     Request or Response object
     """
     if request_or_response not in _urlparse_cache:
-        _urlparse_cache[request_or_response] = urlparse(request_or_response.url)
+        _urlparse_cache[request_or_response] = URL(request_or_response.url)
     return _urlparse_cache[request_or_response]

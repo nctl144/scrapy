@@ -25,7 +25,7 @@ class CookieJar(object):
 
         # the cookiejar implementation iterates through all domains
         # instead we restrict to potential matches on the domain
-        req_host = urlparse_cached(request).hostname
+        req_host = urlparse_cached(request).host
         if not req_host:
             return
 
