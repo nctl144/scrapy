@@ -12,6 +12,7 @@ from tempfile import NamedTemporaryFile
 from datetime import datetime
 import six
 from six.moves.urllib.parse import urlparse
+from yurl import URL
 from ftplib import FTP
 
 from zope.interface import Interface, implementer
@@ -95,7 +96,7 @@ class S3FeedStorage(BlockingFeedStorage):
 
     def __init__(self, uri):
         from scrapy.conf import settings
-        u = urlparse(uri)
+        u = URL(uri)
         self.bucketname = u.hostname
         self.access_key = u.username or settings['AWS_ACCESS_KEY_ID']
         self.secret_key = u.password or settings['AWS_SECRET_ACCESS_KEY']
@@ -127,7 +128,7 @@ class S3FeedStorage(BlockingFeedStorage):
 class FTPFeedStorage(BlockingFeedStorage):
 
     def __init__(self, uri):
-        u = urlparse(uri)
+        u = URL(uri)
         self.host = u.hostname
         self.port = int(u.port or '21')
         self.username = u.username
@@ -241,7 +242,7 @@ class FeedExporter(object):
         logger.error("Unknown feed format: %(format)s", {'format': format})
 
     def _storage_supported(self, uri):
-        scheme = urlparse(uri).scheme
+        scheme = URL(uri).scheme
         if scheme in self.storages:
             try:
                 self._get_storage(uri)
@@ -257,7 +258,7 @@ class FeedExporter(object):
         return self.exporters[self.format](*args, **kwargs)
 
     def _get_storage(self, uri):
-        return self.storages[urlparse(uri).scheme](uri)
+        return self.storages[URL(uri).scheme](uri)
 
     def _get_uri_params(self, spider):
         params = {}
